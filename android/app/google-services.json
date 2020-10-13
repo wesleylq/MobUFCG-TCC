@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "543344927067",
+    "firebase_url": "https://mobufcg-d38f7.firebaseio.com",
+    "project_id": "mobufcg-d38f7",
+    "storage_bucket": "mobufcg-d38f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543344927067:android:fec19021f2eec68be5ba7e",
+        "android_client_info": {
+          "package_name": "com.mobufcg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543344927067-ef8abb8gbhb54lr8r04bbjb1cqma1ljk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD6fILQ9gPvYFT13hsPmspQBmLcqRtyZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543344927067-ef8abb8gbhb54lr8r04bbjb1cqma1ljk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
