@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, Alert } from 'react-native';
-import { View, Text, Colors, Card, Image } from 'react-native-ui-lib';
+import { View, Text, Colors, Toast, Image, Button } from 'react-native-ui-lib';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import MapStyle from "./MapStyle"
-import BottomSheet from 'reanimated-bottom-sheet'
+import { SwipeablePanel } from 'rn-swipeable-panel';
 import { Autocomplete, AutocompleteItem } from '@ui-kitten/components';
 import firestore from '@react-native-firebase/firestore';
 //import labs from '../../labs.json'
 
-const movies = [
-  { title: 'Star Wars' },
-  { title: 'Back to the Future' },
-  { title: 'The Matrix' },
-  { title: 'Inception' },
-  { title: 'Interstellar' },
-];
 
 const filter = (item, query) => item.title.toLowerCase().includes(query.toLowerCase());
 
@@ -37,127 +30,56 @@ export default function Map({ navigation }) {
 
   const [click, setclick] = useState(false)
 
+  const [panelActive, setPanelActive] = useState(false)
+  const [toast, setToast] = useState(true)
+
   //search
   const [value, setValue] = React.useState(null);
-  const [data, setData] = React.useState(movies);
+  const [data, setData] = React.useState(buildings);
+
+  
+  _onClick = (place) => {
+    console.log(place)
+    setclick(place.id)
+
+    setBuildingCover(place.cover == null || place.cover == "" ?
+      "https://www.camaramatozinhos.mg.gov.br/wp-content/uploads/2018/05/sem-foto.jpg"
+      : place.cover)
+    setBuildingName(place.name)
+    setMarkerCoord(place.coord)
+    setShowMarker(true)
+    setPanelActive(true)
+
+  }
 
   const onSelect = (index) => {
-    setValue(movies[index].title);
+    //setValue(buildings[index]._data.name);
+    _onClick(buildings[index]._data)
   };
 
   const onChangeText = (query) => {
     setValue(query);
-    setData(movies.filter(item => filter(item, query)));
+    setData(buildings.filter(item => filter(item, query)));
   };
 
-  const renderOption = (item, index) => (
-    <AutocompleteItem
-      key={index}
-      title={item.title}
-    />
-  );
 
-/*
   useEffect(() => {
-    firestore()
-      .collection('Buildings')
-      .doc("LSP")
-      .set({
-        id: "LSP",
-        name: "LSP",
-        department: "CEEI",
-        unity: "UAEE",
-        logo: null,
-        cover: null,
-        coord: { latitude: -7.212354, longitude: -35.907784 },
-        coords: [
-          { latitude: -7.212293, longitude: -35.907858 },
-          { latitude: -7.212294, longitude: -35.907715 },
-          { latitude: -7.212418, longitude: -35.907714 },
-          { latitude: -7.212420, longitude: -35.907859 },
-         
-                
-        ]     
-      })
-      .then(() => {
-        Alert.alert("Building cadastrado!")
-      }).catch(error => console.error(error));
-  }, [])
-  */
-  /*
-  useEffect(() => {
-    labs.LARCA.forEach(lab => {
-      
-      firestore()
-      .collection('Buildings')
-      .doc("CH1")
-      .collection('Labs')
-      .doc(lab.id)      
-      .set({
-        id: lab.id,
-        name: lab.name,
-        labType: lab.labType,
-        coordinator: lab.coordinator,  
-        department: "CEEI",
-        unity: "UAEE",
-        room: lab.room,
-        description: lab.description,
-        knowlegdeArea: lab.knowlegdeArea,
-        people: lab.people,
-        initDate: lab.initDate,
-        logo: "",
-        cover: "",
-        images: [
-        ]
-
-      })
-      .then(() => {
-        Alert.alert("Lab cadastrado!")
-      }).catch(error => console.error(error));
-
-
-    });
-    
-  }, [])
-*/
-  useEffect(() => {
-
     firestore()
       .collection('Buildings')
       .get()
       .then(documentSnapshot => {
         setBuildings(documentSnapshot._docs);
       });
-    this.bottomSheetRef = React.createRef();
-    //console.log(labs.CC[0].coordinator)
-    //_onClick(buildings[0]._data)
-
   }, [])
 
 
-  _onClick = (place) => {
-    setclick(place.id)
 
-    setBuildingCover( place.cover == null || place.cover == "" ?
-    "https://www.camaramatozinhos.mg.gov.br/wp-content/uploads/2018/05/sem-foto.jpg" 
-    : place.cover)
-    setBuildingName(place.name)
-    setMarkerCoord(place.coord)
-    setShowMarker(true)
-
-
-    this.bottomSheetRef?.current?.snapTo(50);
-  }
-
-
-  renderHeader = () => (
-    <View style={styles.header}>
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle} />
-      </View>
-    </View>
-  )
-
+  const renderOption = (item, index) => ( 
+    <AutocompleteItem
+      key={index}
+      title={item._data.name}
+    />
+  );
 
   return (
     <View style={styles.container}
@@ -201,55 +123,52 @@ export default function Map({ navigation }) {
 
 
       <View style={styles.container}>
-        <View margin-10>
+
+        <View margin-10 center >
           <Autocomplete
-            placeholder='Place your Text'
+            style={{ width: "75%" }}
+            placeholder='Procurar...'
             value={value}
             onSelect={onSelect}
             onChangeText={onChangeText}>
-            {data.map(renderOption)}
+            {buildings.map(renderOption)}
           </Autocomplete>
         </View>
 
-        <BottomSheet
-          ref={this.bottomSheetRef}
-          snapPoints={[240, 40]}
-          renderContent={() =>
-            <View flexG bg-white paddingV-20>
-              <View row left margin-10 marginV-20>
-                <Image
-                  style={{ height: 100, width: 200, borderRadius: 10, resizeMode:"cover" }}
-                  source={{ uri: buildingCover }}
-                />
-                <View margin-10>
-                  <Text text70>{buildingName}</Text>
-                  <Text text70>Nome do Bloco</Text>
-                </View>
+        <SwipeablePanel
+          onlySmall={true}
+          fullWidth={true}
+          showCloseButton={true}
+          isActive={panelActive}
+          onClose={() => setPanelActive(false)}
+          onPressCloseButton={() => setPanelActive(false)}
+        >
+          <View flex center>
 
-              </View>
+            <Image style={{ height: 125, width: "100%", borderRadius: 10 }}
+              resizeMode={"contain"} source={{ uri: buildingCover }} />
 
 
-              <View row>
-                <Card
-                  flex
-                  center
-                  margin-5
-                  style={{ backgroundColor: Colors.blue }}
-                  onPress={() => { navigation.navigate("Building", {buildingId:click}) }}>
-                  <Text>Saiba Mais</Text>
-                </Card>
-                <Card
-                  flex center
-                  margin-5
-                  style={{ backgroundColor: Colors.blue }}
-                  onPress={() => { navigation.navigate("Building", {buildingId: click}) }}>
-                  <Text>Rota</Text>
-                </Card>
-
-              </View>
+            <View center margin-10>
+              <Text text70 style={{ fontWeight: "bold" }}>{buildingName}</Text>
             </View>
-          }
-          renderHeader={() => renderHeader()}
+
+            <Button label={"Ver Salas"}
+              onPress={() => { navigation.navigate("Building", { buildingId: click }) }}
+            />
+
+
+
+          </View>
+        </SwipeablePanel>
+        <Toast
+          visible={toast}
+          position={'bottom'}
+          //backgroundColor={Colors.orange10}
+          message={"Selecione um bloco e conheça todos os laboratórios!"}
+          onDismiss={() => setToast(false)}
+          autoDismiss={3000}
+          showDismiss={true}
         />
       </View>
     </View>
@@ -266,69 +185,7 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  },
-
-  box: {
-    width: 300,
-    height: 200,
-  },
-  panelContainer: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  panel: {
-    height: 600,
-    padding: 20,
-    backgroundColor: '#f7f5eee8',
-  },
-  header: {
-    backgroundColor: '#f7f5eee8',
-    shadowColor: '#000000',
-    paddingTop: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  panelHeader: {
-    alignItems: 'center',
-  },
-  panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#00000040',
-    marginBottom: 10,
-  },
-  panelTitle: {
-    fontSize: 27,
-    height: 35,
-  },
-  panelSubtitle: {
-    fontSize: 14,
-    color: 'gray',
-    height: 30,
-    marginBottom: 10,
-  },
-  panelButton: {
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#318bfb',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  panelButtonTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  photo: {
-    width: '100%',
-    height: 225,
-    marginTop: 30,
-  },
-
+  }
 });
 
 

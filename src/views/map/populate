@@ -1,0 +1,63 @@
+/*
+    useEffect(() => {
+      firestore()
+        .collection('Buildings')
+        .doc("LSP")
+        .set({
+          id: "LSP",
+          name: "LSP",
+          department: "CEEI",
+          unity: "UAEE",
+          logo: null,
+          cover: null,
+          coord: { latitude: -7.212354, longitude: -35.907784 },
+          coords: [
+            { latitude: -7.212293, longitude: -35.907858 },
+            { latitude: -7.212294, longitude: -35.907715 },
+            { latitude: -7.212418, longitude: -35.907714 },
+            { latitude: -7.212420, longitude: -35.907859 },
+           
+                  
+          ]     
+        })
+        .then(() => {
+          Alert.alert("Building cadastrado!")
+        }).catch(error => console.error(error));
+    }, [])
+    */
+  /*
+  useEffect(() => {
+    labs.LARCA.forEach(lab => {
+      
+      firestore()
+      .collection('Buildings')
+      .doc("CH1")
+      .collection('Labs')
+      .doc(lab.id)      
+      .set({
+        id: lab.id,
+        name: lab.name,
+        labType: lab.labType,
+        coordinator: lab.coordinator,  
+        department: "CEEI",
+        unity: "UAEE",
+        room: lab.room,
+        description: lab.description,
+        knowlegdeArea: lab.knowlegdeArea,
+        people: lab.people,
+        initDate: lab.initDate,
+        logo: "",
+        cover: "",
+        images: [
+        ]
+
+      })
+      .then(() => {
+        Alert.alert("Lab cadastrado!")
+      }).catch(error => console.error(error));
+
+
+    });
+    
+  }, [])
+*/

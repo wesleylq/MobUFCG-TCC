@@ -12,7 +12,7 @@ console.disableYellowBox = true
 
 export default function App() {
   return (
-    <NavigationContainer>{          
+           
       <>
       <StatusBar 
       barStyle="dark-content" hidden={false} backgroundColor="#f5f5f5" translucent = {false}
@@ -22,6 +22,6 @@ export default function App() {
             <Routes/>          
         </ApplicationProvider>
       </>     
-    }</NavigationContainer>
+    
   );
 }

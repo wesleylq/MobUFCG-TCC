@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { View, Colors, Image, Card, Carousel } from 'react-native-ui-lib';
+import React, { useEffect, useState } from 'react';
+import { View, Colors, Image, Card, Carousel, Text } from 'react-native-ui-lib';
 import { FlatList, ScrollView, ImageBackground, StyleSheet } from 'react-native';
-import { Button, Text, List } from '@ui-kitten/components';
+import { Button, List } from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 const images = [
   "https://paraibaonline.com.br/wp-content/uploads/2020/06/pr%C3%B3-reitoria-ufcg.jpg",
@@ -10,10 +12,12 @@ const images = [
   "http://sai.ufcg.edu.br/arquivos/images/conteudo/a-ufcg/campus_UFCG_aerea.JPG",
 ]
 
+
 export default function Home({ navigation }) {
+
   return (
     <ScrollView>
-
+      
       <View flex center backgroundColor={Colors.white} style={{ elevation: 1, justifyContent: "center", alignItems: "center" }}>
 
         <Carousel
@@ -44,87 +48,70 @@ export default function Home({ navigation }) {
         </Carousel>
       </View>
 
-
       <View>
         <Card row center marginH-10 marginT-20 marginB-10 style={{ backgroundColor: Colors.blue }}>
-          <Text text70 color={Colors.white}>AÇÕES</Text>
+          <Text text70 color={Colors.white}>Mapas Interativos</Text>
         </Card>
-        <View row>
-          <Card
-            flex
-            margin-10
-            onPress={() => { navigation.navigate("Complain") }}>
-            <Card.Image height={120}
-              imageSource={require('../../assets/megaphone.jpg')} />
-            <View padding-5 center>
-              <Text center text90 grey30 style={{ fontWeight: "bold" }}>
-                RECLAMAR
-              </Text>
-
-            </View>
-          </Card>
-          <Card
-            flex
-            margin-10
-            onPress={() => { navigation.navigate("Complain") }}>
-            <Card.Image height={120}
-              imageSource={require('../../assets/warning.jpg')} />
-            <View padding-5 center>
-              <Text center text90 grey30 style={{ fontWeight: "bold" }}>
-                SUGERIR
-              </Text>
-
-            </View>
-          </Card>
-        </View>
       </View>
+
+      <View flexG row>
+
+        <Card
+          flex
+          margin-10
+          onPress={() => { navigation.navigate("Map") }}>
+          <Card.Image cover height={120}
+            imageSource={require('../../assets/city.jpg')} />
+
+          <View flex center padding-10 >
+            <Text center text60 style={{ fontWeight: "bold" }}>
+              Campus
+            </Text>
+            <Text center text90 style={{ fontWeight: "bold" }}>
+              Saiba se localizar no Campus e conheça todas informações de blocos e laboratórios do campus da UFCG!
+            </Text>
+          </View>
+
+        </Card>
+
+        <Card
+          flex
+          margin-10
+          onPress={() => { navigation.navigate("ReportMap") }}>
+          <Card.Image cover height={120}
+            imageSource={require('../../assets/pointer.jpg')} />
+          <View flex center padding-10 >
+            <Text center text60 style={{ fontWeight: "bold" }}>
+              Reporte
+            </Text>
+            <Text center text90 style={{ fontWeight: "bold" }}>
+              Veja, acompanhe e reporte sugestões, problemas e soluções para o Campus! Aqui você pode contribuir para o crescimento da Universidade! 
+            </Text>
+          </View>
+
+        </Card>
+
+
+      </View>
+
+
 
     </ScrollView>
   )
 }
-
-
 const styles = StyleSheet.create({
-  list: {
+  container: {
     flex: 1,
+    flexDirection: "column"
   },
-  readButton: {
-    width: '50%',
-    marginTop: 32,
-  },
-  headingArticleContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 320,
-  },
-  headingArticleTitle: {
-    zIndex: 1,
-    textAlign: 'center',
-  },
-  headingArticleDescription: {
-    zIndex: 1,
-  },
-  item: {
-    flexDirection: 'row',
-    minHeight: 188,
-  },
-  itemReverse: {
-    flexDirection: 'row-reverse',
-  },
-  itemSection: {
+  image: {
     flex: 1,
-    padding: 16,
+    resizeMode: "cover",
+    justifyContent: "center"
   },
-  itemReactionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 24,
-    marginHorizontal: -8,
-  },
-  itemTitle: {
-    flex: 1,
-  },
-  iconButton: {
-    paddingHorizontal: 0,
-  },
+  text: {
+    color: "grey",
+    fontSize: 30,
+    fontWeight: "bold"
+  }
 });

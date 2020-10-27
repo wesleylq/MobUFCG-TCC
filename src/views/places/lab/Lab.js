@@ -23,14 +23,16 @@ export default function Lab({route}) {
 
   return (
     <ScrollView style={{backgroundColor:"#F2F6FF"}}>
+      
       <ImageBackground
-        source={{uri:lab.cover}}
+        source={{uri:lab.cover == null || lab.cover == "" ? "https://www.camaramatozinhos.mg.gov.br/wp-content/uploads/2018/05/sem-foto.jpg" : lab.cover}}
         imageStyle={{resizeMode: 'contain',}}
         style={{
           flex:1,
           justifyContent: "center",
           height:250,
-          marginVertical:10          
+          marginVertical:10  ,
+          borderRadius:10        
         }}
       />
       <View flex>
@@ -55,13 +57,7 @@ export default function Lab({route}) {
           style={styles.priceLabel}
           category='h6'>
           {lab.room}
-        </Text>
-        <Button
-          style={styles.bookButton}
-          //onPress={onBookButtonPress}
-          >
-          LOCALIZAR
-        </Button>
+        </Text>        
       </Card>
 
       <Text
@@ -118,21 +114,7 @@ export default function Lab({route}) {
         appearance='hint'>
         {lab.people}
       </Text>
-      
-
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
-        About
-      </Text>
-      <Text
-        style={styles.description}
-        appearance='hint'>
-        saddddddddddsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdssddd
-      </Text>
-
-
-
+          
       <Text
         style={styles.sectionLabel}
         category='s1'>
